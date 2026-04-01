@@ -1,11 +1,11 @@
 import type { NativeStackNavigationProp } from "@react-navigation/native-stack";
 import { BlurView } from "expo-blur";
-import { Image, ImageBackground, StyleSheet, View } from "react-native";
+import { ImageBackground, StyleSheet, View } from "react-native";
 
 import { Button } from "@/components/Button";
 import { Screen } from "@/components/Screen";
-import { ThemedText } from "@/components/themed-text";
 import { colors } from "@/constants/colors";
+import { Icons } from "@/constants/icons";
 import { images } from "@/constants/images";
 import { typography } from "@/constants/typography";
 import type { OnboardingParamList } from "@/navigation/types";
@@ -26,10 +26,8 @@ export default function Welcome({ navigation }: Props) {
         <View style={styles.overlay} />
 
         <View style={styles.center}>
-          <Image source={images.icon} style={styles.icon} />
-          <ThemedText type="bodySemiBold" style={styles.title}>
-            BetaDriva
-          </ThemedText>
+          {/* <Image source={images.icon} style={styles.icon} /> */}
+          <Icons.Logo width={150} height={100} />
         </View>
 
         <View style={styles.footer}>
