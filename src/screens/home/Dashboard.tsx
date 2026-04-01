@@ -1,16 +1,12 @@
 import { Ionicons } from "@expo/vector-icons";
 import type { NativeStackNavigationProp } from "@react-navigation/native-stack";
-import {
-  Image,
-  ScrollView,
-  StyleSheet,
-  Text,
-  TouchableOpacity,
-  View,
-} from "react-native";
+import { Image, Pressable, ScrollView, StyleSheet, View } from "react-native";
 
-import { Colors } from "@/constants/colors";
-import type { HomeStackParamList } from "@/src/navigation/types";
+import { Screen } from "@/components/Screen";
+import { ThemedText } from "@/components/themed-text";
+import { colors } from "@/constants/colors";
+import { triggerSelectionHaptics } from "@/functions/haptics";
+import type { HomeStackParamList } from "@/navigation/types";
 
 type Props = {
   navigation: NativeStackNavigationProp<HomeStackParamList, "Dashboard">;
@@ -66,19 +62,26 @@ const RECENT_ACTIVITY = [
 
 export default function Dashboard({ navigation }: Props) {
   return (
-    <ScrollView
-      style={styles.container}
-      contentContainerStyle={styles.content}
-      showsVerticalScrollIndicator={false}
-    >
+    <Screen edges={["top", "left", "right"]} style={{ backgroundColor: "#F8F8F8" }}>
+      <ScrollView
+        style={styles.container}
+        contentContainerStyle={styles.content}
+        showsVerticalScrollIndicator={false}
+      >
       {/* Header */}
       <View style={styles.header}>
         <View>
-          <Text style={styles.address}>32c, Cameron Road Ikoyi, Lago...</Text>
+          <ThemedText type="small" style={styles.address}>
+            32c, Cameron Road Ikoyi, Lago...
+          </ThemedText>
           <View style={styles.carRow}>
-            <Text style={styles.carName}>Toyota Hiace</Text>
+            <ThemedText type="bodySemiBold" style={styles.carName}>
+              Toyota Hiace
+            </ThemedText>
             <View style={styles.plateBadge}>
-              <Text style={styles.plateText}>KSF-903RT</Text>
+              <ThemedText type="mini" style={styles.plateText}>
+                KSF-903RT
+              </ThemedText>
             </View>
           </View>
         </View>
@@ -91,50 +94,71 @@ export default function Dashboard({ navigation }: Props) {
       {/* Action Grid */}
       <View style={styles.grid}>
         {ACTION_CARDS.map((card) => (
-          <TouchableOpacity
+          <Pressable
             key={card.id}
             style={[styles.card, card.id === "maintenance" && styles.cardFull]}
-            onPress={() => card.screen && navigation.navigate(card.screen)}
-            activeOpacity={0.8}
+            onPress={() => {
+              triggerSelectionHaptics();
+              card.screen && navigation.navigate(card.screen);
+            }}
+            android_ripple={{ color: "rgba(0, 0, 0, 0.1)" }}
           >
-            <Text style={styles.cardIcon}>{card.icon}</Text>
-            <Text style={styles.cardLabel}>{card.label}</Text>
-            <Text style={styles.cardStart}>Start</Text>
-          </TouchableOpacity>
+            <ThemedText style={styles.cardIcon}>{card.icon}</ThemedText>
+            <ThemedText type="regularMedium" style={styles.cardLabel}>
+              {card.label}
+            </ThemedText>
+            <ThemedText type="small" style={styles.cardStart}>
+              Start
+            </ThemedText>
+          </Pressable>
         ))}
       </View>
 
       {/* Recent Activity */}
       <View style={styles.sectionHeader}>
-        <Text style={styles.sectionTitle}>Recent Activity</Text>
-        <TouchableOpacity>
-          <Text style={styles.viewAll}>view all</Text>
-        </TouchableOpacity>
+        <ThemedText type="bodyMedium" style={styles.sectionTitle}>
+          Recent Activity
+        </ThemedText>
+        <Pressable onPress={() => triggerSelectionHaptics()}>
+          <ThemedText type="small" style={styles.viewAll}>
+            view all
+          </ThemedText>
+        </Pressable>
       </View>
 
       {RECENT_ACTIVITY.map((item) => (
         <View key={item.id} style={styles.activityItem}>
           <View style={styles.activityIcon}>
-            <Text style={{ fontSize: 18 }}>💳</Text>
+            <ThemedText style={{ fontSize: 18 }}>💳</ThemedText>
           </View>
           <View style={styles.activityInfo}>
-            <Text style={styles.activityTitle}>{item.title}</Text>
-            <Text style={styles.activityDate}>{item.date}</Text>
+            <ThemedText type="bodyMedium" style={styles.activityTitle}>
+              {item.title}
+            </ThemedText>
+            <ThemedText type="small" style={styles.activityDate}>
+              {item.date}
+            </ThemedText>
             <View style={styles.activityRow}>
               <Ionicons
                 name="card-outline"
                 size={12}
-                color={Colors.track_blue}
+                color={colors.track_blue}
               />
-              <Text style={styles.activityMeta}> {item.bank}</Text>
+              <ThemedText type="small" style={styles.activityMeta}>
+                {" "}
+                {item.bank}
+              </ThemedText>
             </View>
             <View style={styles.activityRow}>
               <Ionicons
                 name="card-outline"
                 size={12}
-                color={Colors.track_blue}
+                color={colors.track_blue}
               />
-              <Text style={styles.activityMeta}> {item.amount}</Text>
+              <ThemedText type="small" style={styles.activityMeta}>
+                {" "}
+                {item.amount}
+              </ThemedText>
             </View>
             <ScrollView
               horizontal
@@ -144,14 +168,17 @@ export default function Dashboard({ navigation }: Props) {
               {["Photo of Odometer", "Photo of Fuel Attendant"].map((label) => (
                 <View key={label} style={styles.photoThumb}>
                   <View style={styles.photoPlaceholder} />
-                  <Text style={styles.photoLabel}>{label}</Text>
+                  <ThemedText type="small" style={styles.photoLabel}>
+                    {label}
+                  </ThemedText>
                 </View>
               ))}
             </ScrollView>
           </View>
         </View>
       ))}
-    </ScrollView>
+      </ScrollView>
+    </Screen>
   );
 }
 
@@ -163,7 +190,7 @@ const styles = StyleSheet.create({
     justifyContent: "space-between",
     alignItems: "flex-start",
     paddingHorizontal: 20,
-    paddingTop: 60,
+    paddingTop: 12,
     paddingBottom: 20,
     backgroundColor: "#fff",
   },
@@ -176,7 +203,7 @@ const styles = StyleSheet.create({
     paddingHorizontal: 8,
     paddingVertical: 3,
   },
-  plateText: { fontSize: 11, color: Colors.track_blue, fontWeight: "600" },
+  plateText: { fontSize: 11, color: colors.track_blue, fontWeight: "600" },
   avatar: { width: 44, height: 44, borderRadius: 22, backgroundColor: "#ddd" },
   grid: {
     flexDirection: "row",

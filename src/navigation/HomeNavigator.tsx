@@ -1,11 +1,11 @@
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 
 import type { HomeStackParamList } from './types';
-import Dashboard from '@/src/screens/home/Dashboard';
-import BuyFuel from '@/src/screens/home/BuyFuel';
-import Arrived from '@/src/screens/home/Arrived';
-import ActionCompleted from '@/src/screens/home/ActionCompleted';
-import Analytics from '@/src/screens/home/Analytics';
+import Dashboard from '@/screens/home/Dashboard';
+import BuyFuel from '@/screens/home/BuyFuel';
+import Arrived from '@/screens/home/Arrived';
+import ActionCompleted from '@/screens/home/ActionCompleted';
+import Analytics from '@/screens/home/Analytics';
 
 const Stack = createNativeStackNavigator<HomeStackParamList>();
 

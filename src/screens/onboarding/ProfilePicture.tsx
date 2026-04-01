@@ -1,120 +1,99 @@
-import {
-  Image,
-  StyleSheet,
-  Text,
-  TouchableOpacity,
-  View,
-} from 'react-native';
-import type { NativeStackNavigationProp } from '@react-navigation/native-stack';
-import { useState } from 'react';
-
-import { Button } from '@/components/Button';
-import { Colors } from '@/constants/colors';
-import type { OnboardingParamList } from '@/src/navigation/types';
+import { Button } from "@/components/Button";
+import { Screen } from "@/components/Screen";
+import { ScreenHeader } from "@/components/ScreenHeader";
+import ScrollingView from "@/components/ScrollingView";
+import { ThemedText } from "@/components/themed-text";
+import { colors } from "@/constants/colors";
+import { Icons } from "@/constants/icons";
+import { triggerSelectionHaptics } from "@/functions/haptics";
+import { selectImage } from "@/functions/imagePicker";
+import type { OnboardingParamList } from "@/navigation/types";
+import type { NativeStackNavigationProp } from "@react-navigation/native-stack";
+import { useState } from "react";
+import { Image, Pressable, StyleSheet, View } from "react-native";
 
 type Props = {
-  navigation: NativeStackNavigationProp<OnboardingParamList, 'ProfilePicture'>;
+  navigation: NativeStackNavigationProp<OnboardingParamList, "ProfilePicture">;
 };
 
 export default function ProfilePicture({ navigation }: Props) {
   const [imageUri, setImageUri] = useState<string | null>(null);
 
+  const handlePickImage = async () => {
+    triggerSelectionHaptics();
+    const result = await selectImage();
+
+    if (!result) return;
+
+    setImageUri(result.uri);
+  };
+
   return (
-    <View style={styles.container}>
-      <TouchableOpacity style={styles.backButton} onPress={() => navigation.goBack()}>
-        <Text style={styles.backChevron}>‹</Text>
-      </TouchableOpacity>
+    <Screen>
+      <ScreenHeader navigation={navigation} />
 
-      <View style={styles.content}>
-        <Text style={styles.title}>Add a Profile Photo</Text>
+      <ScrollingView bounces={false}>
+        <View style={{ flex: 1, padding: 20 }}>
+          <View style={styles.content}>
+            <ThemedText type="title" style={{ textAlign: "center" }}>
+              Add a Profile Phote
+            </ThemedText>
 
-        <TouchableOpacity style={styles.imagePicker} onPress={() => {}}>
-          {imageUri ? (
-            <Image source={{ uri: imageUri }} style={styles.previewImage} />
-          ) : (
-            <View style={styles.placeholder}>
-              <Text style={styles.placeholderIcon}>🖼</Text>
-              <Text style={styles.placeholderText}>Add Image</Text>
-            </View>
-          )}
-        </TouchableOpacity>
-      </View>
+            <Pressable style={styles.imagePicker} onPress={handlePickImage}>
+              {imageUri ? (
+                <Image source={{ uri: imageUri }} style={styles.previewImage} />
+              ) : (
+                <View style={styles.placeholder}>
+                  <Icons.GalleryAdd />
+                  <ThemedText type="bodyMedium" color="gray_deep">
+                    Add Image
+                  </ThemedText>
+                </View>
+              )}
+            </Pressable>
+          </View>
 
-      <View style={styles.footer}>
-        <Button
-          label="Continue"
-          style={styles.button}
-          onPress={() => navigation.getParent()?.navigate('Tabs')}
-        />
-      </View>
-    </View>
+          <Button
+            label="Continue"
+            onPress={() => navigation.getParent()?.navigate("Tabs")}
+          />
+        </View>
+      </ScrollingView>
+    </Screen>
   );
 }
 
 const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: '#FFFFFF',
-  },
-  backButton: {
-    marginTop: 56,
-    marginLeft: 20,
-    width: 36,
-    height: 36,
-    borderRadius: 18,
-    backgroundColor: '#F2F2F2',
-    alignItems: 'center',
-    justifyContent: 'center',
-  },
-  backChevron: {
-    fontSize: 22,
-    color: Colors.black,
-    lineHeight: 26,
-  },
   content: {
     flex: 1,
-    paddingHorizontal: 24,
-    paddingTop: 40,
-    alignItems: 'center',
+    marginTop: 79,
+    gap: 27,
   },
   title: {
     fontSize: 22,
-    fontWeight: '700',
-    color: Colors.black,
-    textAlign: 'center',
+    fontWeight: "700",
+    color: colors.black,
+    textAlign: "center",
     marginBottom: 32,
   },
   imagePicker: {
-    width: '100%',
-    aspectRatio: 1,
-    backgroundColor: '#F5F5F5',
-    borderRadius: 14,
-    alignItems: 'center',
-    justifyContent: 'center',
-    overflow: 'hidden',
+    width: 242,
+    height: 211,
+    backgroundColor: colors.gray_secondary,
+    borderRadius: 10,
+    alignItems: "center",
+    justifyContent: "center",
+    alignSelf: "center",
   },
   placeholder: {
-    alignItems: 'center',
+    alignItems: "center",
     gap: 8,
+    borderRadius: 10,
   },
-  placeholderIcon: {
-    fontSize: 32,
-    opacity: 0.35,
-  },
-  placeholderText: {
-    fontSize: 14,
-    color: '#B0B0B0',
-  },
+
   previewImage: {
-    width: '100%',
-    height: '100%',
-  },
-  footer: {
-    paddingHorizontal: 24,
-    paddingBottom: 40,
-  },
-  button: {
-    borderRadius: 30,
-    paddingVertical: 16,
+    borderRadius: 10,
+    width: "100%",
+    height: "100%",
   },
 });

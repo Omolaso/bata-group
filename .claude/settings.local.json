@@ -7,7 +7,8 @@
       "Bash(pod install:*)",
       "Bash(eas project:list)",
       "Read(//Users/ecoonline/.gradle/caches/**)",
-      "Bash(curl -L https://repo1.maven.org/maven2/com/ncorti/ktfmt/gradle/plugin/0.22.0/plugin-0.22.0.jar -o /tmp/ktfmt-plugin-0.22.0.jar)"
+      "Bash(curl -L https://repo1.maven.org/maven2/com/ncorti/ktfmt/gradle/plugin/0.22.0/plugin-0.22.0.jar -o /tmp/ktfmt-plugin-0.22.0.jar)",
+      "Bash(yarn add:*)"
     ]
   }
 }

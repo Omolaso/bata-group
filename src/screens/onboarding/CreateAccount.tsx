@@ -1,104 +1,62 @@
-import {
-  KeyboardAvoidingView,
-  Platform,
-  StyleSheet,
-  Text,
-  TextInput,
-  TouchableOpacity,
-  View,
-} from 'react-native';
-import type { NativeStackNavigationProp } from '@react-navigation/native-stack';
-import { useState } from 'react';
-
-import { Button } from '@/components/Button';
-import { Colors } from '@/constants/colors';
-import type { OnboardingParamList } from '@/src/navigation/types';
+import AvoidingView from "@/components/AvoidingView";
+import { Button } from "@/components/Button";
+import InputField from "@/components/InputField";
+import { Screen } from "@/components/Screen";
+import { ScreenHeader } from "@/components/ScreenHeader";
+import ScrollingView from "@/components/ScrollingView";
+import { ThemedText } from "@/components/themed-text";
+import { colors } from "@/constants/colors";
+import type { OnboardingParamList } from "@/navigation/types";
+import type { NativeStackNavigationProp } from "@react-navigation/native-stack";
+import { useState } from "react";
+import { StyleSheet, View } from "react-native";
 
 type Props = {
-  navigation: NativeStackNavigationProp<OnboardingParamList, 'CreateAccount'>;
+  navigation: NativeStackNavigationProp<OnboardingParamList, "CreateAccount">;
 };
 
 export default function CreateAccount({ navigation }: Props) {
-  const [phone, setPhone] = useState('');
+  const [phone, setPhone] = useState<string>("");
 
   return (
-    <KeyboardAvoidingView
-      style={styles.container}
-      behavior={Platform.OS === 'ios' ? 'padding' : 'height'}>
-      <TouchableOpacity style={styles.backButton} onPress={() => navigation.goBack()}>
-        <Text style={styles.backChevron}>‹</Text>
-      </TouchableOpacity>
+    <Screen>
+      <AvoidingView>
+        <ScreenHeader navigation={navigation} />
 
-      <View style={styles.content}>
-        <Text style={styles.title}>Create Account</Text>
+        <ScrollingView bounces={false}>
+          <View style={{ flex: 1, padding: 20 }}>
+            <View style={styles.content}>
+              <ThemedText type="title" style={{ textAlign: "center" }}>
+                Create Account
+              </ThemedText>
 
-        <TextInput
-          style={styles.input}
-          placeholder="Phone Number"
-          placeholderTextColor="#B0B0B0"
-          keyboardType="phone-pad"
-          value={phone}
-          onChangeText={setPhone}
-        />
-      </View>
+              <InputField
+                placeholder="Phone Number"
+                value={phone}
+                keyboardType="phone-pad"
+                onChangeText={setPhone}
+              />
+            </View>
 
-      <View style={styles.footer}>
-        <Button
-          label="Continue"
-          style={styles.button}
-          onPress={() => navigation.navigate('VerifyNumber')}
-        />
-      </View>
-    </KeyboardAvoidingView>
+            <Button
+              label="Continue"
+              onPress={() => navigation.navigate("VerifyNumber")}
+            />
+          </View>
+        </ScrollingView>
+      </AvoidingView>
+    </Screen>
   );
 }
 
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#FFFFFF',
-  },
-  backButton: {
-    marginTop: 56,
-    marginLeft: 20,
-    width: 36,
-    height: 36,
-    borderRadius: 18,
-    backgroundColor: '#F2F2F2',
-    alignItems: 'center',
-    justifyContent: 'center',
-  },
-  backChevron: {
-    fontSize: 22,
-    color: Colors.black,
-    lineHeight: 26,
+    backgroundColor: colors.white,
   },
   content: {
     flex: 1,
-    paddingHorizontal: 24,
-    paddingTop: 40,
-  },
-  title: {
-    fontSize: 22,
-    fontWeight: '700',
-    color: Colors.black,
-    textAlign: 'center',
-    marginBottom: 32,
-  },
-  input: {
-    backgroundColor: '#F5F5F5',
-    borderRadius: 10,
-    paddingHorizontal: 16,
-    paddingVertical: 14,
-    fontSize: 15,
-    color: Colors.black,
-  },
-  footer: {
-    paddingHorizontal: 24,
-    paddingBottom: 40,
-  },
-  button: {
-    borderRadius: 30,
-    paddingVertical: 16,
+    marginTop: 79,
+    gap: 27,
   },
 });

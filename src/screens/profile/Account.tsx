@@ -1,25 +1,48 @@
-import {
-  Image,
-  StyleSheet,
-  Text,
-  TouchableOpacity,
-  View,
-} from 'react-native';
-import type { NativeStackNavigationProp } from '@react-navigation/native-stack';
-import { useCallback, useRef } from 'react';
-import BottomSheet, { BottomSheetView } from '@gorhom/bottom-sheet';
-import { Ionicons } from '@expo/vector-icons';
-
-import { Button } from '@/components/Button';
-import { Colors } from '@/constants/colors';
-import type { ProfileStackParamList } from '@/src/navigation/types';
+import { Screen } from "@/components/Screen";
+import { ScreenHeader } from "@/components/ScreenHeader";
+import ScrollingView from "@/components/ScrollingView";
+import { ThemedText } from "@/components/themed-text";
+import { colors } from "@/constants/colors";
+import { Icons } from "@/constants/icons";
+import { typography } from "@/constants/typography";
+import { triggerSelectionHaptics } from "@/functions/haptics";
+import type { ProfileStackParamList } from "@/navigation/types";
+import { Feather } from "@expo/vector-icons";
+import BottomSheet, { BottomSheetView } from "@gorhom/bottom-sheet";
+import type { NativeStackNavigationProp } from "@react-navigation/native-stack";
+import { useCallback, useRef } from "react";
+import { Image, Pressable, StyleSheet, View } from "react-native";
 
 type Props = {
-  navigation: NativeStackNavigationProp<ProfileStackParamList, 'Account'>;
+  navigation: NativeStackNavigationProp<ProfileStackParamList, "Account">;
 };
 
 export default function Account({ navigation }: Props) {
   const bottomSheetRef = useRef<BottomSheet>(null);
+
+  const accountOptions = [
+    {
+      label: "Notifications",
+      icon: <Icons.Notification />,
+      onPress: () => {
+        navigation.navigate("Notifications");
+      },
+    },
+    {
+      label: "Change Password",
+      icon: <Icons.Lock />,
+      onPress: () => {
+        navigation.navigate("ChangePassword");
+      },
+    },
+    {
+      label: "Log Out",
+      icon: <Icons.Logout />,
+      onPress: () => {
+        openLogout();
+      },
+    },
+  ];
 
   const openLogout = useCallback(() => {
     bottomSheetRef.current?.expand();
@@ -30,119 +53,175 @@ export default function Account({ navigation }: Props) {
   }, []);
 
   return (
-    <View style={styles.container}>
-      {/* Header */}
-      <View style={styles.headerRow}>
-        <TouchableOpacity style={styles.backBtn} onPress={() => navigation.goBack()}>
-          <Text style={styles.backChevron}>‹</Text>
-        </TouchableOpacity>
-        <Text style={styles.headerTitle}>Account</Text>
-        <View style={{ width: 36 }} />
-      </View>
+    <Screen>
+      <ScreenHeader navigation={navigation} title="Account" />
 
-      {/* Avatar */}
-      <View style={styles.avatarSection}>
-        <Image source={{ uri: 'https://i.pravatar.cc/120' }} style={styles.avatar} />
-        <Text style={styles.name}>Adaeze Chamberlain</Text>
-      </View>
+      <ScrollingView>
+        <View style={{ flex: 1, padding: 20 }}>
+          <View style={{ flex: 1, gap: 40 }}>
+            <View style={styles.avatarSection}>
+              <Image
+                source={{ uri: "https://i.pravatar.cc/120" }}
+                style={styles.avatar}
+              />
+              <ThemedText type="bodySemiBold" style={styles.name}>
+                Adaeze Chamberlain
+              </ThemedText>
+            </View>
 
-      {/* Account Section */}
-      <Text style={styles.sectionLabel}>ACCOUNT</Text>
+            <View style={{ gap: 16 }}>
+              <ThemedText type="small" color="gray_inner">
+                ACCOUNT
+              </ThemedText>
 
-      <TouchableOpacity style={styles.row} onPress={() => navigation.navigate('Notifications')}>
-        <Ionicons name="notifications-outline" size={20} color="#050505" style={styles.rowIcon} />
-        <Text style={styles.rowLabel}>Notifications</Text>
-        <Ionicons name="chevron-forward" size={16} color="#ccc" />
-      </TouchableOpacity>
+              <View style={{ gap: 36 }}>
+                {accountOptions.map((option) => {
+                  const isLogout = option.label === "Log Out";
 
-      <TouchableOpacity style={styles.row} onPress={() => navigation.navigate('ChangePassword')}>
-        <Ionicons name="lock-closed-outline" size={20} color="#050505" style={styles.rowIcon} />
-        <Text style={styles.rowLabel}>Change Password</Text>
-        <Ionicons name="chevron-forward" size={16} color="#ccc" />
-      </TouchableOpacity>
+                  return (
+                    <Pressable
+                      key={option.label}
+                      style={[styles.row, { justifyContent: "space-between" }]}
+                      onPress={() => {
+                        triggerSelectionHaptics();
+                        option.onPress();
+                      }}
+                    >
+                      <View style={styles.row}>
+                        <>{option.icon}</>
+                        <ThemedText
+                          type="bodySemiBold"
+                          color={isLogout ? "error" : "black"}
+                        >
+                          {option.label}
+                        </ThemedText>
+                      </View>
+                      <Feather
+                        name="chevron-right"
+                        size={16}
+                        color={colors.gray_inner_10}
+                      />
+                    </Pressable>
+                  );
+                })}
+              </View>
+            </View>
+          </View>
 
-      <TouchableOpacity style={styles.row} onPress={openLogout}>
-        <Ionicons name="log-out-outline" size={20} color="#E53935" style={styles.rowIcon} />
-        <Text style={[styles.rowLabel, styles.rowLabelRed]}>Log Out</Text>
-        <Ionicons name="chevron-forward" size={16} color="#ccc" />
-      </TouchableOpacity>
-
-      {/* Footer */}
-      <Text style={styles.footer}>
-        Betadriver gives car owners the tool to track their spending and manage{'\n'}
-        their drivers it also empowers drivers with jobs loans and so much more
-      </Text>
+          {/* Footer */}
+          <ThemedText type="body" style={styles.footer}>
+            Betadriver gives car owners the tool to track their spending and
+            manage
+            {"\n"}
+            their drivers it also empowers drivers with jobs loans and so much
+            more
+          </ThemedText>
+        </View>
+      </ScrollingView>
 
       {/* Logout Bottom Sheet */}
       <BottomSheet
         ref={bottomSheetRef}
         index={-1}
-        snapPoints={['30%']}
+        snapPoints={["30%"]}
         enablePanDownToClose
-        backgroundStyle={styles.sheetBackground}>
+        backgroundStyle={styles.sheetBackground}
+      >
         <BottomSheetView style={styles.sheetContent}>
-          <Text style={styles.sheetTitle}>Log Out</Text>
-          <Text style={styles.sheetSubtitle}>
-            You will be logged out of your account, but dont worry, you can always come back
-          </Text>
+          <ThemedText type="bodyMedium" style={styles.sheetTitle}>
+            Log Out
+          </ThemedText>
+          <ThemedText type="body" style={styles.sheetSubtitle}>
+            You will be logged out of your account, but dont worry, you can
+            always come back
+          </ThemedText>
           <View style={styles.sheetButtons}>
-            <TouchableOpacity style={styles.cancelBtn} onPress={closeLogout}>
-              <Text style={styles.cancelText}>Cancel</Text>
-            </TouchableOpacity>
-            <TouchableOpacity style={styles.logoutBtn} onPress={closeLogout}>
-              <Text style={styles.logoutText}>Log Out</Text>
-            </TouchableOpacity>
+            <Pressable
+              style={styles.cancelBtn}
+              onPress={() => {
+                triggerSelectionHaptics();
+                closeLogout();
+              }}
+            >
+              <ThemedText type="bodyMedium" style={styles.cancelText}>
+                Cancel
+              </ThemedText>
+            </Pressable>
+            <Pressable
+              style={styles.logoutBtn}
+              onPress={() => {
+                triggerSelectionHaptics();
+                closeLogout();
+              }}
+            >
+              <ThemedText type="bodyMedium" style={styles.logoutText}>
+                Log Out
+              </ThemedText>
+            </Pressable>
           </View>
         </BottomSheetView>
       </BottomSheet>
-    </View>
+    </Screen>
   );
 }
 
 const styles = StyleSheet.create({
-  container: { flex: 1, backgroundColor: '#fff' },
-  headerRow: {
-    flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between',
-    paddingHorizontal: 20, paddingTop: 56, paddingBottom: 16,
-  },
-  backBtn: {
-    width: 36, height: 36, borderRadius: 18,
-    backgroundColor: '#F2F2F2', alignItems: 'center', justifyContent: 'center',
-  },
-  backChevron: { fontSize: 22, color: '#050505', lineHeight: 26 },
-  headerTitle: { fontSize: 17, fontWeight: '700', color: '#050505' },
-  avatarSection: { alignItems: 'center', marginBottom: 28 },
+  avatarSection: { alignItems: "center", gap: 16 },
   avatar: {
-    width: 80, height: 80, borderRadius: 40,
-    backgroundColor: '#ddd', borderWidth: 3, borderColor: '#eee', marginBottom: 12,
+    width: 120,
+    height: 120,
+    borderRadius: 100,
+    backgroundColor: colors.transparent,
+    borderWidth: 1,
+    borderColor: colors.gray_inner_20,
   },
-  name: { fontSize: 18, fontWeight: '700', color: '#050505' },
-  sectionLabel: { fontSize: 11, fontWeight: '700', color: '#aaa', paddingHorizontal: 24, marginBottom: 4, letterSpacing: 1 },
+  name: { fontSize: typography.fontSize.xl },
+
   row: {
-    flexDirection: 'row', alignItems: 'center',
-    paddingHorizontal: 24, paddingVertical: 16,
-    borderBottomWidth: 1, borderBottomColor: '#F2F2F2',
+    flexDirection: "row",
+    alignItems: "center",
+    gap: 16,
   },
-  rowIcon: { marginRight: 14 },
-  rowLabel: { flex: 1, fontSize: 15, color: '#050505' },
-  rowLabelRed: { color: '#E53935' },
   footer: {
-    position: 'absolute', bottom: 32, left: 0, right: 0,
-    textAlign: 'center', fontSize: 11, color: '#bbb', paddingHorizontal: 24, lineHeight: 16,
+    position: "absolute",
+    bottom: 32,
+    left: 0,
+    right: 0,
+    textAlign: "center",
+    fontSize: 11,
+    color: "#bbb",
+    paddingHorizontal: 24,
+    lineHeight: 16,
   },
-  sheetBackground: { borderRadius: 24, backgroundColor: '#fff' },
+  sheetBackground: { borderRadius: 24, backgroundColor: "#fff" },
   sheetContent: { paddingHorizontal: 24, paddingTop: 8, paddingBottom: 32 },
-  sheetTitle: { fontSize: 18, fontWeight: '700', color: '#050505', marginBottom: 8 },
-  sheetSubtitle: { fontSize: 13, color: '#888', marginBottom: 24, lineHeight: 20 },
-  sheetButtons: { flexDirection: 'row', gap: 12 },
+  sheetTitle: {
+    fontSize: 18,
+    fontWeight: "700",
+    color: "#050505",
+    marginBottom: 8,
+  },
+  sheetSubtitle: {
+    fontSize: 13,
+    color: "#888",
+    marginBottom: 24,
+    lineHeight: 20,
+  },
+  sheetButtons: { flexDirection: "row", gap: 12 },
   cancelBtn: {
-    flex: 1, backgroundColor: '#F2F2F2', borderRadius: 30,
-    paddingVertical: 14, alignItems: 'center',
+    flex: 1,
+    backgroundColor: "#F2F2F2",
+    borderRadius: 30,
+    paddingVertical: 14,
+    alignItems: "center",
   },
-  cancelText: { fontSize: 15, fontWeight: '600', color: '#050505' },
+  cancelText: { fontSize: 15, fontWeight: "600", color: "#050505" },
   logoutBtn: {
-    flex: 1, backgroundColor: '#E53935', borderRadius: 30,
-    paddingVertical: 14, alignItems: 'center',
+    flex: 1,
+    backgroundColor: "#E53935",
+    borderRadius: 30,
+    paddingVertical: 14,
+    alignItems: "center",
   },
-  logoutText: { fontSize: 15, fontWeight: '600', color: '#fff' },
+  logoutText: { fontSize: 15, fontWeight: "600", color: "#fff" },
 });

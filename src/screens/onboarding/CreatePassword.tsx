@@ -1,116 +1,67 @@
-import {
-  KeyboardAvoidingView,
-  Platform,
-  StyleSheet,
-  Text,
-  TextInput,
-  TouchableOpacity,
-  View,
-} from 'react-native';
-import type { NativeStackNavigationProp } from '@react-navigation/native-stack';
-import { useState } from 'react';
-
-import { Button } from '@/components/Button';
-import { Colors } from '@/constants/colors';
-import type { OnboardingParamList } from '@/src/navigation/types';
+import AvoidingView from "@/components/AvoidingView";
+import { Button } from "@/components/Button";
+import InputField from "@/components/InputField";
+import { Screen } from "@/components/Screen";
+import { ScreenHeader } from "@/components/ScreenHeader";
+import ScrollingView from "@/components/ScrollingView";
+import { ThemedText } from "@/components/themed-text";
+import type { OnboardingParamList } from "@/navigation/types";
+import type { NativeStackNavigationProp } from "@react-navigation/native-stack";
+import { useState } from "react";
+import { StyleSheet, View } from "react-native";
 
 type Props = {
-  navigation: NativeStackNavigationProp<OnboardingParamList, 'CreatePassword'>;
+  navigation: NativeStackNavigationProp<OnboardingParamList, "CreatePassword">;
 };
 
 export default function CreatePassword({ navigation }: Props) {
-  const [password, setPassword] = useState('');
-  const [confirmPassword, setConfirmPassword] = useState('');
+  const [password, setPassword] = useState("");
+  const [confirmPassword, setConfirmPassword] = useState("");
 
   return (
-    <KeyboardAvoidingView
-      style={styles.container}
-      behavior={Platform.OS === 'ios' ? 'padding' : 'height'}>
-      <TouchableOpacity style={styles.backButton} onPress={() => navigation.goBack()}>
-        <Text style={styles.backChevron}>‹</Text>
-      </TouchableOpacity>
+    <Screen>
+      <AvoidingView>
+        <ScreenHeader navigation={navigation} />
 
-      <View style={styles.content}>
-        <Text style={styles.title}>Create Password</Text>
+        <ScrollingView bounces={false}>
+          <View style={{ flex: 1, padding: 20 }}>
+            <View style={styles.content}>
+              <ThemedText type="title" style={{ textAlign: "center" }}>
+                Create Password
+              </ThemedText>
 
-        <TextInput
-          style={styles.input}
-          placeholder="Password"
-          placeholderTextColor="#B0B0B0"
-          secureTextEntry
-          value={password}
-          onChangeText={setPassword}
-        />
-        <TextInput
-          style={[styles.input, styles.inputSpacing]}
-          placeholder="Confirm password"
-          placeholderTextColor="#B0B0B0"
-          secureTextEntry
-          value={confirmPassword}
-          onChangeText={setConfirmPassword}
-        />
-      </View>
+              <View style={{ gap: 12 }}>
+                <InputField
+                  secureTextEntry
+                  placeholder="Password"
+                  value={password}
+                  onChangeText={setPassword}
+                />
 
-      <View style={styles.footer}>
-        <Button
-          label="Continue"
-          style={styles.button}
-          onPress={() => navigation.navigate('EnterFullName')}
-        />
-      </View>
-    </KeyboardAvoidingView>
+                <InputField
+                  secureTextEntry
+                  placeholder="Confirm password"
+                  value={confirmPassword}
+                  onChangeText={setConfirmPassword}
+                />
+              </View>
+            </View>
+
+            <Button
+              label="Continue"
+              onPress={() => navigation.navigate("EnterFullName")}
+            />
+          </View>
+        </ScrollingView>
+      </AvoidingView>
+    </Screen>
   );
 }
 
 const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: '#FFFFFF',
-  },
-  backButton: {
-    marginTop: 56,
-    marginLeft: 20,
-    width: 36,
-    height: 36,
-    borderRadius: 18,
-    backgroundColor: '#F2F2F2',
-    alignItems: 'center',
-    justifyContent: 'center',
-  },
-  backChevron: {
-    fontSize: 22,
-    color: Colors.black,
-    lineHeight: 26,
-  },
   content: {
     flex: 1,
-    paddingHorizontal: 24,
-    paddingTop: 40,
-  },
-  title: {
-    fontSize: 22,
-    fontWeight: '700',
-    color: Colors.black,
-    textAlign: 'center',
-    marginBottom: 32,
-  },
-  input: {
-    backgroundColor: '#F5F5F5',
-    borderRadius: 10,
-    paddingHorizontal: 16,
-    paddingVertical: 14,
-    fontSize: 15,
-    color: Colors.black,
-  },
-  inputSpacing: {
-    marginTop: 12,
-  },
-  footer: {
-    paddingHorizontal: 24,
-    paddingBottom: 40,
-  },
-  button: {
-    borderRadius: 30,
-    paddingVertical: 16,
+    marginTop: 79,
+    gap: 27,
   },
 });

@@ -1,9 +1,9 @@
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 
 import type { ProfileStackParamList } from './types';
-import Account from '@/src/screens/profile/Account';
-import Notifications from '@/src/screens/profile/Notifications';
-import ChangePassword from '@/src/screens/profile/ChangePassword';
+import Account from '@/screens/profile/Account';
+import Notifications from '@/screens/profile/Notifications';
+import ChangePassword from '@/screens/profile/ChangePassword';
 
 const Stack = createNativeStackNavigator<ProfileStackParamList>();
 

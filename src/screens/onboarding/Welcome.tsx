@@ -1,34 +1,46 @@
-import { Image, ImageBackground, StyleSheet, Text, View } from 'react-native';
-import type { NativeStackNavigationProp } from '@react-navigation/native-stack';
+import type { NativeStackNavigationProp } from "@react-navigation/native-stack";
+import { BlurView } from "expo-blur";
+import { Image, ImageBackground, StyleSheet, View } from "react-native";
 
-import { Button } from '@/components/Button';
-import type { OnboardingParamList } from '@/src/navigation/types';
+import { Button } from "@/components/Button";
+import { Screen } from "@/components/Screen";
+import { ThemedText } from "@/components/themed-text";
+import { colors } from "@/constants/colors";
+import { images } from "@/constants/images";
+import { typography } from "@/constants/typography";
+import type { OnboardingParamList } from "@/navigation/types";
 
 type Props = {
-  navigation: NativeStackNavigationProp<OnboardingParamList, 'Welcome'>;
+  navigation: NativeStackNavigationProp<OnboardingParamList, "Welcome">;
 };
 
 export default function Welcome({ navigation }: Props) {
   return (
-    <ImageBackground
-      source={require('@/assets/images/onboarding-bg.png')}
-      style={styles.background}
-      resizeMode="cover">
-      <View style={styles.overlay} />
+    <Screen removeSafeArea>
+      <ImageBackground
+        source={images.onboardingBg}
+        style={styles.background}
+        resizeMode="cover"
+      >
+        <BlurView intensity={10} style={styles.blurContainer} />
+        <View style={styles.overlay} />
 
-      <View style={styles.center}>
-        <Image source={require('@/assets/images/icon.png')} style={styles.icon} />
-        <Text style={styles.title}>BetaDriva</Text>
-      </View>
+        <View style={styles.center}>
+          <Image source={images.icon} style={styles.icon} />
+          <ThemedText type="bodySemiBold" style={styles.title}>
+            BetaDriva
+          </ThemedText>
+        </View>
 
-      <View style={styles.footer}>
-        <Button
-          label="Get Started"
-          style={styles.button}
-          onPress={() => navigation.navigate('CreateAccount')}
-        />
-      </View>
-    </ImageBackground>
+        <View style={styles.footer}>
+          <Button
+            label="Get Started"
+            style={styles.button}
+            onPress={() => navigation.navigate("CreateAccount")}
+          />
+        </View>
+      </ImageBackground>
+    </Screen>
   );
 }
 
@@ -36,14 +48,17 @@ const styles = StyleSheet.create({
   background: {
     flex: 1,
   },
+  blurContainer: {
+    ...StyleSheet.absoluteFill,
+  },
   overlay: {
-    ...StyleSheet.absoluteFillObject,
-    backgroundColor: 'rgba(0, 0, 0, 0.45)',
+    ...StyleSheet.absoluteFill,
+    backgroundColor: "rgba(0, 0, 0, 0.45)",
   },
   center: {
     flex: 1,
-    alignItems: 'center',
-    justifyContent: 'center',
+    alignItems: "center",
+    justifyContent: "center",
     gap: 12,
   },
   icon: {
@@ -52,9 +67,8 @@ const styles = StyleSheet.create({
     borderRadius: 16,
   },
   title: {
-    color: '#FFFFFF',
-    fontSize: 28,
-    fontWeight: '700',
+    color: colors.white,
+    fontSize: typography.fontSize["4xl"],
     letterSpacing: 0.5,
   },
   footer: {

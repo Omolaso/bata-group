@@ -1,12 +1,12 @@
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 
 import type { OnboardingParamList } from './types';
-import Welcome from '@/src/screens/onboarding/Welcome';
-import CreateAccount from '@/src/screens/onboarding/CreateAccount';
-import VerifyNumber from '@/src/screens/onboarding/VerifyNumber';
-import CreatePassword from '@/src/screens/onboarding/CreatePassword';
-import EnterFullName from '@/src/screens/onboarding/EnterFullName';
-import ProfilePicture from '@/src/screens/onboarding/ProfilePicture';
+import Welcome from '@/screens/onboarding/Welcome';
+import CreateAccount from '@/screens/onboarding/CreateAccount';
+import VerifyNumber from '@/screens/onboarding/VerifyNumber';
+import CreatePassword from '@/screens/onboarding/CreatePassword';
+import EnterFullName from '@/screens/onboarding/EnterFullName';
+import ProfilePicture from '@/screens/onboarding/ProfilePicture';
 
 const Stack = createNativeStackNavigator<OnboardingParamList>();
 

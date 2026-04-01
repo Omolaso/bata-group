@@ -1,20 +1,19 @@
-import 'react-native-reanimated';
+import "react-native-reanimated";
 
-import { GestureHandlerRootView } from 'react-native-gesture-handler';
+import { navigationRef } from "@/navigation/Navigation";
+import OnboardingNavigator from "@/navigation/OnboardingNavigator";
+import TabNavigator from "@/navigation/TabNavigator";
+import type { RootStackParamList } from "@/navigation/types";
 import {
   DarkTheme,
   DefaultTheme,
   NavigationContainer,
   ThemeProvider,
-} from '@react-navigation/native';
-import { createNativeStackNavigator } from '@react-navigation/native-stack';
-import { StatusBar } from 'expo-status-bar';
-
-import { useColorScheme } from '@/hooks/use-color-scheme';
-import { navigationRef } from '@/src/navigation/Navigation';
-import OnboardingNavigator from '@/src/navigation/OnboardingNavigator';
-import TabNavigator from '@/src/navigation/TabNavigator';
-import type { RootStackParamList } from '@/src/navigation/types';
+} from "@react-navigation/native";
+import { createNativeStackNavigator } from "@react-navigation/native-stack";
+import { StatusBar } from "expo-status-bar";
+import { useColorScheme } from "react-native";
+import { GestureHandlerRootView } from "react-native-gesture-handler";
 
 const Stack = createNativeStackNavigator<RootStackParamList>();
 
@@ -23,7 +22,7 @@ export default function App() {
 
   return (
     <GestureHandlerRootView style={{ flex: 1 }}>
-      <ThemeProvider value={colorScheme === 'dark' ? DarkTheme : DefaultTheme}>
+      <ThemeProvider value={colorScheme === "dark" ? DarkTheme : DefaultTheme}>
         <NavigationContainer ref={navigationRef}>
           <Stack.Navigator screenOptions={{ headerShown: false }}>
             <Stack.Screen name="Onboarding" component={OnboardingNavigator} />

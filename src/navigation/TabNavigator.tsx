@@ -1,10 +1,11 @@
 import { Ionicons } from "@expo/vector-icons";
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
-import { StyleSheet, Text, View } from "react-native";
+import { StyleSheet, View } from "react-native";
 
-import { Colors } from "@/constants/colors";
-import ActivityScreen from "@/src/screens/tabs/ActivityScreen";
-import TransactionsScreen from "@/src/screens/tabs/TransactionsScreen";
+import { ThemedText } from "@/components/themed-text";
+import { colors } from "@/constants/colors";
+import ActivityScreen from "@/screens/tabs/ActivityScreen";
+import TransactionsScreen from "@/screens/tabs/TransactionsScreen";
 import HomeNavigator from "./HomeNavigator";
 import ProfileNavigator from "./ProfileNavigator";
 import type { TabParamList } from "./types";
@@ -23,11 +24,14 @@ function TabIcon({ name, focused, label }: TabIconProps) {
       <Ionicons
         name={name}
         size={20}
-        color={focused ? Colors.track_blue : "#AAAAAA"}
+        color={focused ? colors.track_blue : "#AAAAAA"}
       />
-      <Text style={[styles.tabLabel, focused && styles.tabLabelFocused]}>
+      <ThemedText
+        type="mini"
+        style={[styles.tabLabel, focused && styles.tabLabelFocused]}
+      >
         {label}
-      </Text>
+      </ThemedText>
     </View>
   );
 }
@@ -131,7 +135,7 @@ const styles = StyleSheet.create({
     fontWeight: "500",
   },
   tabLabelFocused: {
-    color: Colors.track_blue,
+    color: colors.track_blue,
     fontWeight: "600",
   },
 });

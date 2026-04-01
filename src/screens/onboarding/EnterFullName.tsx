@@ -1,104 +1,57 @@
-import {
-  KeyboardAvoidingView,
-  Platform,
-  StyleSheet,
-  Text,
-  TextInput,
-  TouchableOpacity,
-  View,
-} from 'react-native';
-import type { NativeStackNavigationProp } from '@react-navigation/native-stack';
-import { useState } from 'react';
-
-import { Button } from '@/components/Button';
-import { Colors } from '@/constants/colors';
-import type { OnboardingParamList } from '@/src/navigation/types';
+import AvoidingView from "@/components/AvoidingView";
+import { Button } from "@/components/Button";
+import InputField from "@/components/InputField";
+import { Screen } from "@/components/Screen";
+import { ScreenHeader } from "@/components/ScreenHeader";
+import ScrollingView from "@/components/ScrollingView";
+import { ThemedText } from "@/components/themed-text";
+import type { OnboardingParamList } from "@/navigation/types";
+import type { NativeStackNavigationProp } from "@react-navigation/native-stack";
+import { useState } from "react";
+import { StyleSheet, View } from "react-native";
 
 type Props = {
-  navigation: NativeStackNavigationProp<OnboardingParamList, 'EnterFullName'>;
+  navigation: NativeStackNavigationProp<OnboardingParamList, "EnterFullName">;
 };
 
 export default function EnterFullName({ navigation }: Props) {
-  const [fullName, setFullName] = useState('');
+  const [fullName, setFullName] = useState<string>("");
 
   return (
-    <KeyboardAvoidingView
-      style={styles.container}
-      behavior={Platform.OS === 'ios' ? 'padding' : 'height'}>
-      <TouchableOpacity style={styles.backButton} onPress={() => navigation.goBack()}>
-        <Text style={styles.backChevron}>‹</Text>
-      </TouchableOpacity>
+    <Screen>
+      <AvoidingView>
+        <ScreenHeader navigation={navigation} />
 
-      <View style={styles.content}>
-        <Text style={styles.title}>What's your fullname</Text>
+        <ScrollingView bounces={false}>
+          <View style={{ flex: 1, padding: 20 }}>
+            <View style={styles.content}>
+              <ThemedText type="title" style={{ textAlign: "center" }}>
+                What&apos;s your fullname
+              </ThemedText>
 
-        <TextInput
-          style={styles.input}
-          placeholder="Fullname"
-          placeholderTextColor="#B0B0B0"
-          autoCapitalize="words"
-          value={fullName}
-          onChangeText={setFullName}
-        />
-      </View>
+              <InputField
+                placeholder="Fullname"
+                autoCapitalize="words"
+                value={fullName}
+                onChangeText={setFullName}
+              />
+            </View>
 
-      <View style={styles.footer}>
-        <Button
-          label="Continue"
-          style={styles.button}
-          onPress={() => navigation.navigate('ProfilePicture')}
-        />
-      </View>
-    </KeyboardAvoidingView>
+            <Button
+              label="Continue"
+              onPress={() => navigation.navigate("ProfilePicture")}
+            />
+          </View>
+        </ScrollingView>
+      </AvoidingView>
+    </Screen>
   );
 }
 
 const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: '#FFFFFF',
-  },
-  backButton: {
-    marginTop: 56,
-    marginLeft: 20,
-    width: 36,
-    height: 36,
-    borderRadius: 18,
-    backgroundColor: '#F2F2F2',
-    alignItems: 'center',
-    justifyContent: 'center',
-  },
-  backChevron: {
-    fontSize: 22,
-    color: Colors.black,
-    lineHeight: 26,
-  },
   content: {
     flex: 1,
-    paddingHorizontal: 24,
-    paddingTop: 40,
-  },
-  title: {
-    fontSize: 22,
-    fontWeight: '700',
-    color: Colors.black,
-    textAlign: 'center',
-    marginBottom: 32,
-  },
-  input: {
-    backgroundColor: '#F5F5F5',
-    borderRadius: 10,
-    paddingHorizontal: 16,
-    paddingVertical: 14,
-    fontSize: 15,
-    color: Colors.black,
-  },
-  footer: {
-    paddingHorizontal: 24,
-    paddingBottom: 40,
-  },
-  button: {
-    borderRadius: 30,
-    paddingVertical: 16,
+    marginTop: 79,
+    gap: 27,
   },
 });
