@@ -1,7 +1,7 @@
 {
   "expo": {
     "name": "bata-group",
-    "slug": "bata-group",
+    "slug": "betadriva",
     "version": "1.0.0",
     "orientation": "portrait",
     "icon": "./assets/icon.png",
@@ -29,7 +29,7 @@
       [
         "expo-splash-screen",
         {
-          "image": "./assets/images/splash-icon.png",
+          "image": "./assets/splash-icon.png",
           "imageWidth": 200,
           "resizeMode": "contain",
           "backgroundColor": "#ffffff",
@@ -41,6 +41,11 @@
     ],
     "experiments": {
       "reactCompiler": true
+    },
+    "extra": {
+      "eas": {
+        "projectId": "8137600d-8fe3-4041-8fe3-293c2c834c32"
+      }
     }
   }
 }

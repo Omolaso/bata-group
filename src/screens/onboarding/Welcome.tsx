@@ -1,6 +1,7 @@
-import { StyleSheet, Text, View } from 'react-native';
+import { Image, ImageBackground, StyleSheet, Text, View } from 'react-native';
 import type { NativeStackNavigationProp } from '@react-navigation/native-stack';
 
+import { Button } from '@/components/Button';
 import type { OnboardingParamList } from '@/src/navigation/types';
 
 type Props = {
@@ -9,20 +10,59 @@ type Props = {
 
 export default function Welcome({ navigation }: Props) {
   return (
-    <View style={styles.container}>
-      <Text style={styles.title}>Welcome</Text>
-    </View>
+    <ImageBackground
+      source={require('@/assets/images/onboarding-bg.png')}
+      style={styles.background}
+      resizeMode="cover">
+      <View style={styles.overlay} />
+
+      <View style={styles.center}>
+        <Image source={require('@/assets/images/icon.png')} style={styles.icon} />
+        <Text style={styles.title}>BetaDriva</Text>
+      </View>
+
+      <View style={styles.footer}>
+        <Button
+          label="Get Started"
+          style={styles.button}
+          onPress={() => navigation.navigate('CreateAccount')}
+        />
+      </View>
+    </ImageBackground>
   );
 }
 
 const styles = StyleSheet.create({
-  container: {
+  background: {
+    flex: 1,
+  },
+  overlay: {
+    ...StyleSheet.absoluteFillObject,
+    backgroundColor: 'rgba(0, 0, 0, 0.45)',
+  },
+  center: {
     flex: 1,
     alignItems: 'center',
     justifyContent: 'center',
+    gap: 12,
+  },
+  icon: {
+    width: 72,
+    height: 72,
+    borderRadius: 16,
   },
   title: {
-    fontSize: 24,
-    fontWeight: '600',
+    color: '#FFFFFF',
+    fontSize: 28,
+    fontWeight: '700',
+    letterSpacing: 0.5,
+  },
+  footer: {
+    paddingHorizontal: 24,
+    paddingBottom: 48,
+  },
+  button: {
+    borderRadius: 30,
+    paddingVertical: 16,
   },
 });
