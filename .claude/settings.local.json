@@ -1,0 +1,10 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(npm install:*)",
+      "Bash(node -e \"console.log\\(require\\('/Users/ecoonline/Documents/Tech/mobile/bata-group/node_modules/react-native/package.json'\\).version\\)\")",
+      "Bash(curl -L --progress-bar https://repo1.maven.org/maven2/com/facebook/react/react-native-artifacts/0.81.5/react-native-artifacts-0.81.5-hermes-ios-debug.tar.gz -o /Users/ecoonline/Documents/Tech/mobile/bata-group/node_modules/react-native/sdks/hermes/hermes-runtime-darwin/hermes-ios-debug.tar.gz)",
+      "Bash(pod install:*)"
+    ]
+  }
+}
