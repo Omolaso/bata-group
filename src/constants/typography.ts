@@ -4,6 +4,7 @@ export const typography = {
     light: "TTCommons-Light",
     regular: "TTCommons-Regular",
     medium: "TTCommons-Medium",
+    semibold: "TTCommons-DemiBold",
     bold: "TTCommons-Bold",
     extra_bold: "TTCommons-ExtraBold",
     black: "TTCommons-ExtraBold",
@@ -52,7 +53,7 @@ export const textStyles = {
 
   bodySemiBold: {
     fontSize: typography.fontSize.md,
-    fontFamily: typography.fontFamily.bold,
+    fontFamily: typography.fontFamily.semibold,
   },
 
   bodyBold: {
